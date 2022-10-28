@@ -725,6 +725,7 @@ int main() {
 		time_t now = time(0);
 		tm* ltm = localtime(&now);
 		std::cout << "Date: " << ltm->tm_mday << "." << 1 + ltm->tm_mon << "." << 1900 + ltm->tm_year << "\nTime: " << ltm->tm_hour << ":" << ltm->tm_min << std::endl;
+		
 		std::cout << "User: " << user.login << std::endl;
 		std::cout << "Balance: " << user.balance << "$" << std::endl;
 		std::cout << "Enter a command: ";
@@ -801,8 +802,14 @@ int main() {
 		}
 
 		//Добавление собственного авто
-		if (user_command == "addauto") {
-			add_auto();
+		else if (user_command == "addauto") {
+			if (user.isBanned()) {
+				std::cout << "You cant do it (you are banned)" << std::endl;
+			}
+			else {
+				add_auto();
+			}
+			tap_enter_to_continue();
 		}
 
 		//Просмотр списка свободных машин
@@ -818,8 +825,13 @@ int main() {
 
 		//Аренда автомобиля из свободных для сдачи машин
 		else if (user_command == "rauto") {
-			free_auto_list();
-			do_booking_auto();
+			if (user.isBanned()) {
+				std::cout << "You cant do it (you are banned)" << std::endl;
+			} 
+			else {
+				free_auto_list();
+				do_booking_auto();
+			}
 			tap_enter_to_continue();
 		}
 
