@@ -401,6 +401,50 @@ namespace CSharp
             }
             return null;
         }
+
+        public static int sing_up()
+        {
+            string[] users = File.ReadAllLines("Users.txt");
+            bool correctLogin = false;
+            string login = "", password;
+            do
+            {
+                Console.Write("Enter a login: ");
+                login = Console.ReadLine();
+                if (login == "")
+                {
+                    Console.WriteLine("The input is empty");
+                    tap_enter_to_continue();
+                    continue;
+                }
+                if (login.IndexOf(' ') != -1)
+                {
+                    Console.WriteLine("Login may not contain a space bar");
+                    tap_enter_to_continue();
+                    continue;
+                }
+                correctLogin = true;
+                foreach (string user in users)
+                {
+                    string login_f = user.Split(':')[0];
+                    if (login == login_f)
+                    {
+                        Console.WriteLine("This login is unvailable");
+                        correctLogin = false;
+                        break;
+                    }
+                }
+            } while (!correctLogin);
+            Console.Write("Enter a password: ");
+            password = Console.ReadLine();
+            using (StreamWriter writer = new StreamWriter("Users.txt", true))
+            {
+                writer.WriteLine($"{login}:{password}:0");
+            }
+            Console.WriteLine("You signed up successfully");
+            return 1;
+        }
+
         public static void say_goodbye()
         {
             Console.WriteLine("Bye-bye, see you later");
@@ -418,6 +462,7 @@ namespace CSharp
                 switch (first_command)
                 {
                     case "sign up":
+                        sing_up();
                         break;
                     case "sign in":
                         Console.Write("Enter login: ");
